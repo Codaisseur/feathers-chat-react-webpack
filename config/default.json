@@ -1,0 +1,19 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "mongodb": "mongodb://localhost:27017/feathersChat",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "05+6Hv9HksII1rAwdagtMKX08NtSRDS3g82v7fr3eN3WkFRTRU/P7sCnr9TOiFmll8Ratz+Z/4phEUaRex6LFQ=="
+    },
+    "local": {},
+    "github": {
+      "clientID": "your github client id",
+      "clientSecret": "your github client secret",
+      "permissions": {
+        "scope": []
+      }
+    }
+  }
+}
