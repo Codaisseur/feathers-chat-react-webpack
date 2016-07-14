@@ -1,12 +1,5 @@
 var path = require('path');
 var webpack = require('webpack');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-
-var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
-  template: path.join(__dirname, 'app', 'index.html'),
-  filename: 'index.html',
-  inject: 'body'
-});
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -15,11 +8,6 @@ module.exports = {
     'webpack-hot-middleware/client',
     './app/index'
   ],
-  // output: {
-  //   path: __dirname + '/dist',
-  //   filename: 'index_bundle.js',
-  //   publicPath: '/'
-  // },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -37,7 +25,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    HTMLWebpackPluginConfig
+    new webpack.NoErrorsPlugin()
   ]
 };

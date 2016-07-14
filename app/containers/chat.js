@@ -1,10 +1,11 @@
 import React from 'react';
+import Channel from './channel';
 
 class Chat extends React.Component {
   render() {
     return(
       <div>
-        <h1>Let's Chat!</h1>
+        <Channel app={this.props.app} />
       </div>
     );
   }

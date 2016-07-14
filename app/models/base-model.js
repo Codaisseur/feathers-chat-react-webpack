@@ -1,51 +1,30 @@
 import SocketClient from 'socket.io-client';
 import Feathers from 'feathers-client';
-import Utils from '../lib/Utils';
+import Utils from '../lib/utils';
 import _ from 'lodash';
-
-const API_HOST = ''; // use this host!
 
 class BaseModel {
   defaults() { return {}; }
 
-  constructor(resourceName, onError, host = API_HOST) {
+  constructor(app, resourceName, onError) {
+    this.app = app;
     this.utils = new Utils();
-    this.socket = new SocketClient(host);
-    this.app = Feathers()
-      .configure(Feathers.socketio(this.socket))
-      .configure(Feathers.hooks())
-      .configure(Feathers.authentication({ storage: window.localStorage }));
-
     this.service = this.app.service(this.utils.pluralize(resourceName));
     this.onChanges = [];
     this.resources = [];
 
-    this.service.find(function(error, resources) {
+    this.service.find((error, resources) => {
       if (error) {
-        this.onError(error);
+        console.error(error);
       } else {
-        this.resources = resources;
+        this.resources = resources.data;
         this.inform();
       }
-    }.bind(this));
+    });
 
     this.service.on('created', this.createResource.bind(this));
     this.service.on('updated', this.updateResource.bind(this));
     this.service.on('removed', this.removeResource.bind(this));
-  }
-
-  authenticate(credentials, success) {
-    credentials = _.merge(credentials || {}, {
-      type: 'local'
-    });
-
-    this.app.authenticate(credentials).then(function(result){
-      console.log('Authenticated!', this.app.get('token'));
-      success(this.app.get('token'));
-    }).catch(function(error){
-      console.error('Error authenticating!', error);
-      this.onError(error);
-    });
   }
 
   subscribe(onChange) {

@@ -11,7 +11,8 @@ class Authenticate extends React.Component {
 
     this.state = {
       register: false,
-      passwordsMatch: true
+      passwordsMatch: true,
+      errorMessage: 'Hi there!'
     };
   }
 
@@ -22,9 +23,14 @@ class Authenticate extends React.Component {
     app.authenticate(_.merge({
       type: 'local',
     }, this.userFromForm())).then((result) => {
-      console.log('Authenticated!', app.get('token'));
+      self.setState({
+        errorMessage: 'Hi there!'
+      });
       self.props.onAuthenticate();
     }).catch((error) => {
+      self.setState({
+        errorMessage: error.message
+      });
       console.error('Error authenticating!', error);
     });
   }
@@ -42,7 +48,9 @@ class Authenticate extends React.Component {
     app.service('users').create(
       this.userFromForm()
     ).then((result) => {
-      console.log('Signed up!', result);
+      self.setState({
+        errorMessage: 'Hi there!'
+      });
       self.authenticate();
     }).catch((error) => {
       console.error('Error authenticating!', error);
@@ -93,7 +101,7 @@ class Authenticate extends React.Component {
 
     return (
       <Dialog
-        title="Hi there!"
+        title={ this.state.errorMessage }
         actions={actions}
         modal={false}
         open={true}

@@ -6,8 +6,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import App from './app';
 
-injectTapEventPlugin();
-
 if (module.hot) {
   module.hot.accept();
 }
@@ -24,5 +22,6 @@ const app = feathers()
     storage: window.localStorage
   }));
 
+injectTapEventPlugin();
 
 render(<MuiThemeProvider><App app={app} /></MuiThemeProvider>, document.getElementById('app'));

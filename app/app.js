@@ -8,7 +8,8 @@ class App extends React.Component {
     super();
 
     this.state = {
-      authenticated: false
+      authenticated: false,
+      currentUser: null
     };
   }
 
@@ -32,8 +33,11 @@ class App extends React.Component {
     let app = this.props.app;
     let self = this;
 
-    app.authenticate().then(() => {
-      self.setState({ authenticated: true });
+    app.authenticate().then((response) => {
+      self.setState({
+        authenticated: true,
+        currentUser: response.data
+      });
     }).catch(error => {
       if(error.code === 401) {
         self.setState({ authenticated: false });
@@ -49,7 +53,7 @@ class App extends React.Component {
     if (this.state.authenticated) {
       return(
         <div>
-          <Header app={app} onAuthenticateError={this.onAuthenticateError.bind(this)} />
+          <Header app={app} currentUser={ this.state.currentUser } onAuthenticateError={this.onAuthenticateError.bind(this)} />
           <Chat app={app} onAuthenticateError={this.onAuthenticateError.bind(this)} />
         </div>
       );
