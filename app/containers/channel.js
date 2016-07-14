@@ -3,14 +3,21 @@ import Message from './message';
 import BaseModel from '../models/base-model';
 import { List } from 'material-ui/List';
 import MessageInput from './message-input';
+import _ from 'lodash';
 
 class Channel extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      messages: [],
-      paddingBottom: 80
+      messages: []
+    };
+
+    this.style = {
+      paddingTop: 56,
+      paddingBottom: 86,
+      width: props.width,
+      float: 'right'
     };
   }
 
@@ -36,6 +43,15 @@ class Channel extends React.Component {
     });
   }
 
+  updateMessage(id, properties) {
+    const app = this.props.app;
+    const messageService = app.service('messages');
+
+    messageService.update(id, properties, (response) => {
+      console.log(response);
+    });
+  }
+
   setScrollTop() {
     let inputHeight = document.getElementById('messageInputWrapper').clientHeight;
     document.getElementById('channelWrapper').style.paddingBottom = inputHeight;
@@ -44,10 +60,10 @@ class Channel extends React.Component {
 
   render() {
     return (
-      <div id='channelWrapper' style={{ paddingBottom: this.state.paddingBottom }}>
+      <div id='channelWrapper' style={ _.merge(this.style, { width: this.props.width }) }>
         <List>
           {this.state.messages.map((message) => {
-            return <Message key={ message._id } { ...message } />;
+            return <Message key={ message._id } { ...message } onUpdate={this.updateMessage.bind(this)} />;
           })}
         </List>
         <MessageInput app={this.props.app} onResize={this.setScrollTop.bind(this)} />

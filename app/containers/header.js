@@ -8,6 +8,16 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Avatar from 'material-ui/Avatar';
 
 class Header extends React.Component {
+  constructor() {
+    super();
+
+    this.style = {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0
+    };
+  }
   logout() {
     let self = this;
 
@@ -19,6 +29,7 @@ class Header extends React.Component {
   render() {
     return(
       <AppBar
+        style={ this.style }
         title='SLAKO'
         iconElementLeft={<Avatar src={ this.props.currentUser.avatar } />}
         iconElementRight={

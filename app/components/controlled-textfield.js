@@ -7,7 +7,7 @@ class ControlledTextField extends React.Component {
     super(props);
 
     this.state = {
-      value: '',
+      value: props.value || '',
     };
   }
 

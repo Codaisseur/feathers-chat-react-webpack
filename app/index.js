@@ -4,6 +4,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import ChatTheme from './styles/chat-theme';
 import App from './app';
 
 if (module.hot) {
@@ -24,4 +26,4 @@ const app = feathers()
 
 injectTapEventPlugin();
 
-render(<MuiThemeProvider><App app={app} /></MuiThemeProvider>, document.getElementById('app'));
+render(<MuiThemeProvider muiTheme={getMuiTheme(ChatTheme)}><App app={app} /></MuiThemeProvider>, document.getElementById('app'));
