@@ -2,7 +2,7 @@
   "host": "feathers-chat-app.feathersjs.com",
   "port": 80,
   "mongodb": "DATABASE_URL",
-  "public": "../public/",
+  "public": "../app/",
   "auth": {
     "token": {
       "secret": "FEATHERS_AUTH_SECRET"

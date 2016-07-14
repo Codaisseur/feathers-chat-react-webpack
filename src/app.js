@@ -11,10 +11,23 @@ const hooks = require('feathers-hooks');
 const rest = require('feathers-rest');
 const bodyParser = require('body-parser');
 const socketio = require('feathers-socketio');
+const webpack = require('webpack');
 const middleware = require('./middleware');
 const services = require('./services');
 
+const configType = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+
+const config = require(`../webpack.config.${configType}.js`);
+
 const app = feathers();
+const compiler = webpack(config);
+
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true,
+  publicPath: config.output.publicPath
+}));
+
+app.use(require('webpack-hot-middleware')(compiler));
 
 app.configure(configuration(path.join(__dirname, '..')));
 

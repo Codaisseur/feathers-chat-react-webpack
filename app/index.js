@@ -1,0 +1,28 @@
+import io from 'socket.io-client';
+import feathers from 'feathers-client';
+import React from 'react';
+import { render } from 'react-dom';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import App from './app';
+
+injectTapEventPlugin();
+
+if (module.hot) {
+  module.hot.accept();
+}
+
+// Establish a Socket.io connection
+const socket = io();
+// Initialize our Feathers client application through Socket.io
+// with hooks and authentication.
+const app = feathers()
+  .configure(feathers.socketio(socket))
+  .configure(feathers.hooks())
+  // Use localStorage to store our login token
+  .configure(feathers.authentication({
+    storage: window.localStorage
+  }));
+
+
+render(<MuiThemeProvider><App app={app} /></MuiThemeProvider>, document.getElementById('app'));
