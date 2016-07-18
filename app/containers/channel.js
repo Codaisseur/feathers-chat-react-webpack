@@ -1,6 +1,6 @@
 import React from 'react';
 import Message from './message';
-import BaseModel from '../models/base-model';
+import MessageModel from '../models/message-model';
 import { List } from 'material-ui/List';
 import MessageInput from './message-input';
 import _ from 'lodash';
@@ -8,6 +8,10 @@ import _ from 'lodash';
 class Channel extends React.Component {
   constructor(props) {
     super(props);
+
+    this.model = new MessageModel(props.app);
+    this.model.subscribe(this.updateMessages.bind(this));
+    this.model.subscribe(this.setScrollTop.bind(this));
 
     this.state = {
       messages: []
@@ -21,35 +25,21 @@ class Channel extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const messageService = this.props.app.service('messages');
-
-    messageService.find({
-      query: {
-        $sort: { createdAt: -1 },
-        $limit: this.props.limit || 10
-      }
-    }).then((page) => {
-      this.setState({
-        messages: page.data.reverse()
-      }, this.setScrollTop.bind(this));
-    });
-
-    // Listen to newly created messages
-    messageService.on('created', (message) => {
-      this.setState({
-        messages: this.state.messages.concat(message)
-      }, this.setScrollTop.bind(this));
+  updateMessages() {
+    this.setState({
+      messages: this.model.resources
     });
   }
 
   updateMessage(id, properties) {
-    const app = this.props.app;
-    const messageService = app.service('messages');
+    // const app = this.props.app;
+    // const messageService = app.service('messages');
 
-    messageService.update(id, properties, (response) => {
-      console.log(response);
-    });
+    this.model.save(id, properties);
+
+    // messageService.update(id, properties, (response) => {
+    //   console.log(response);
+    // });
   }
 
   setScrollTop() {

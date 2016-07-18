@@ -6,6 +6,8 @@ import _ from 'lodash';
 class BaseModel {
   defaults() { return {}; }
 
+  findParams() { return {}; }
+
   constructor(app, resourceName, onError) {
     this.app = app;
     this.utils = new Utils();
@@ -13,13 +15,18 @@ class BaseModel {
     this.onChanges = [];
     this.resources = [];
 
-    this.service.find((error, resources) => {
+    let self = this;
+
+    this.service.find(this.findParams(), (error, resources) => {
       if (error) {
         console.error(error);
       } else {
         this.resources = resources.data;
         this.inform();
       }
+    }).then((page) => {
+      self.resources = page.data;
+      self.inform();
     });
 
     this.service.on('created', this.createResource.bind(this));

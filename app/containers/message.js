@@ -35,7 +35,10 @@ class Message extends React.Component {
   }
 
   updateMessage(newMessage) {
-    this.props.onUpdate(this.props._id, this.utils.extend({}, this.props, { text: newMessage, onUpdate: null, updatedAt: Date.now }));
+    this.props.onUpdate(this.props._id,
+      this.utils.extend({}, this.props,
+        { text: newMessage, onUpdate: null, updatedAt: Date.now }));
+
     this.setState({
       text: newMessage,
       editing: false
